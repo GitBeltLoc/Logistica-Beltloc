@@ -50,6 +50,29 @@ html, body {
   display: block;
 }
 
+.header-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.header-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.countdown {
+  font-size: 0.75rem;
+  color: var(--muted);
+  font-weight: bold;
+  background: #f1f5f9;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--panel-border);
+}
+
 .header-right {
   width: 340px;
 }

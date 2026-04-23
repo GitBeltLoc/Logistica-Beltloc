@@ -1,4 +1,5 @@
 const CSV_URL = 'dados.csv';
+const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutos
 
 const DIAS = [
   { id: 'segunda', label: 'SEGUNDA' },
@@ -17,18 +18,44 @@ const DIA_MAP = {
 };
 
 let allItems = [];
+let countdown = REFRESH_INTERVAL / 1000;
 
 document.addEventListener('DOMContentLoaded', () => {
   buildBoard();
   loadCSV();
+  startCountdown();
 
   document.getElementById('q').addEventListener('input', function () {
     renderBoard(allItems, this.value.trim().toLowerCase());
   });
 });
 
+// ── AUTO-REFRESH ──────────────────────────────────────────
+function startCountdown() {
+  countdown = REFRESH_INTERVAL / 1000;
+
+  setInterval(() => {
+    countdown--;
+    updateCountdown();
+
+    if (countdown <= 0) {
+      countdown = REFRESH_INTERVAL / 1000;
+      loadCSV();
+    }
+  }, 1000);
+}
+
+function updateCountdown() {
+  const min = Math.floor(countdown / 60);
+  const sec = String(countdown % 60).padStart(2, '0');
+  const el = document.getElementById('countdown');
+  if (el) el.textContent = `🔄 Próxima atualização: ${min}:${sec}`;
+}
+
+// ── CARREGAMENTO ──────────────────────────────────────────
 function loadCSV() {
   setStatus('Carregando dados...');
+
   fetch(CSV_URL + '?nocache=' + Date.now())
     .then(res => {
       if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -37,14 +64,16 @@ function loadCSV() {
     .then(text => {
       if (!text || !text.trim()) throw new Error('Arquivo vazio');
       allItems = parseCSV(text);
-      setStatus('✅ ' + allItems.length + ' operações carregadas.');
-      renderBoard(allItems, '');
+      const now = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+      setStatus('✅ ' + allItems.length + ' operações carregadas. Última atualização: ' + now);
+      renderBoard(allItems, document.getElementById('q').value.trim().toLowerCase());
     })
     .catch(err => {
       setStatus('❌ Erro: ' + err.message + ' — Verifique se dados.csv está na raiz do repositório.');
     });
 }
 
+// ── PARSER CSV ────────────────────────────────────────────
 function parseCSV(raw) {
   const text = raw.replace(/^\uFEFF/, '').trim();
   const lines = text.split(/\r?\n/);
@@ -112,6 +141,7 @@ function toMin(hhmm) {
   return m ? +m[1] * 60 + +m[2] : 9999;
 }
 
+// ── RENDER ────────────────────────────────────────────────
 function buildBoard() {
   const board = document.getElementById('board');
   board.innerHTML = '';
@@ -188,6 +218,7 @@ function makeCard(it) {
   return card;
 }
 
+// ── HELPERS VISUAIS ───────────────────────────────────────
 function getColors(tipo) {
   const t = normalize(tipo);
   const c = [];
