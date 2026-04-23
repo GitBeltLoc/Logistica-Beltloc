@@ -29,7 +29,6 @@ html, body {
   overflow: hidden;
 }
 
-/* HEADER */
 .app-header {
   display: flex;
   justify-content: space-between;
@@ -70,9 +69,8 @@ html, body {
   box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
 }
 
-/* BOARD */
 .board-wrap {
-  padding: 10px 10px 0;
+  padding: 10px 10px 10px;
   height: calc(100vh - 52px);
   overflow: hidden;
 }
@@ -84,7 +82,6 @@ html, body {
   height: 100%;
 }
 
-/* COLUNAS */
 .col {
   background: var(--col-bg);
   border: 1px solid var(--col-border);
@@ -131,7 +128,6 @@ html, body {
 .col-body::-webkit-scrollbar-track { background: transparent; }
 .col-body::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
 
-/* CARDS */
 .card {
   background: var(--card);
   border: 1px solid var(--card-border);

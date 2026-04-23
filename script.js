@@ -6,8 +6,6 @@ const DIAS = [
   { id: 'quarta',  label: 'QUARTA'  },
   { id: 'quinta',  label: 'QUINTA'  },
   { id: 'sexta',   label: 'SEXTA'   },
-  { id: 'sabado',  label: 'SÁBADO'  },
-  { id: 'domingo', label: 'DOMINGO' },
 ];
 
 const DIA_MAP = {
@@ -16,8 +14,6 @@ const DIA_MAP = {
   'quarta': 'quarta', 'qua': 'quarta',
   'quinta': 'quinta', 'qui': 'quinta',
   'sexta': 'sexta', 'sex': 'sexta',
-  'sabado': 'sabado', 'sábado': 'sabado', 'sab': 'sabado', 'sáb': 'sabado',
-  'domingo': 'domingo', 'dom': 'domingo',
 };
 
 let allItems = [];
@@ -31,10 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// ── CARREGAMENTO ──────────────────────────────────────────
 function loadCSV() {
   setStatus('Carregando dados...');
-
   fetch(CSV_URL + '?nocache=' + Date.now())
     .then(res => {
       if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -51,17 +45,13 @@ function loadCSV() {
     });
 }
 
-// ── PARSER CSV ────────────────────────────────────────────
 function parseCSV(raw) {
-  // Remove BOM
   const text = raw.replace(/^\uFEFF/, '').trim();
   const lines = text.split(/\r?\n/);
   if (lines.length < 2) return [];
 
-  // Detecta delimitador
   const first = lines[0];
   const delim = (first.split(';').length > first.split(',').length) ? ';' : ',';
-
   const headers = first.split(delim).map(h => normalize(h));
   const items = [];
 
@@ -94,7 +84,6 @@ function parseCSV(raw) {
   return items;
 }
 
-// Divide linha respeitando aspas
 function splitLine(line, delim) {
   const cols = [];
   let cur = '', inQ = false;
@@ -123,7 +112,6 @@ function toMin(hhmm) {
   return m ? +m[1] * 60 + +m[2] : 9999;
 }
 
-// ── RENDER ────────────────────────────────────────────────
 function buildBoard() {
   const board = document.getElementById('board');
   board.innerHTML = '';
@@ -164,7 +152,6 @@ function makeCard(it) {
   const tpl = document.getElementById('tpl-card');
   const card = tpl.content.firstElementChild.cloneNode(true);
 
-  // Barrinhas coloridas
   const labelsEl = card.querySelector('.labels');
   getColors(it.tipo).forEach(c => {
     const bar = document.createElement('div');
@@ -173,27 +160,21 @@ function makeCard(it) {
     labelsEl.appendChild(bar);
   });
 
-  // Status dot
   const dot = card.querySelector('.status-dot');
-  const st = getStatus(it.status);
-  dot.classList.add('status-' + st);
+  dot.classList.add('status-' + getStatus(it.status));
   dot.title = it.status;
 
-  // Título
   card.querySelector('.card-title').textContent =
     (it.hora ? it.hora + ' — ' : '') + (it.tipo || 'Sem tipo');
 
-  // Descrição
   const lines = [];
   if (it.obs)     lines.push(it.obs);
   if (it.cliente || it.cidade) lines.push('- ' + [it.cliente, it.cidade].filter(Boolean).join(', '));
   if (it.equip)   lines.push('- ' + it.equip);
   card.querySelector('.card-desc').textContent = lines.join('\n');
 
-  // Chip data (oculto por padrão)
   card.querySelector('.chip-date').hidden = true;
 
-  // Avatares técnicos
   const avatars = card.querySelector('.avatars');
   it.tecs.slice(0, 4).forEach((t, i) => {
     const av = document.createElement('div');
@@ -207,7 +188,6 @@ function makeCard(it) {
   return card;
 }
 
-// ── HELPERS VISUAIS ───────────────────────────────────────
 function getColors(tipo) {
   const t = normalize(tipo);
   const c = [];
