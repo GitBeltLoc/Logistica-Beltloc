@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Logística da Semana</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-left">
+      <h1>Logística da Semana</h1>
+      <div class="sub">Carregue um CSV exportado do Excel para montar o quadro por dia.</div>
+    </div>
+
+    <div class="header-right">
+      <div class="control">
+        <label class="label">Carregar CSV (do seu computador)</label>
+        <input id="csvFile" type="file" accept=".csv,text/csv" />
+        <div class="hint">Dica: Excel costuma exportar CSV com “;” (também funciona).</div>
+      </div>
+
+      <div class="control">
+        <label class="label">Ou carregar do repositório</label>
+        <button id="btnLoadDefault" class="btn">Carregar <code>dados.csv</code></button>
+        <div class="hint">Coloque um arquivo chamado <code>dados.csv</code> na raiz do site.</div>
+      </div>
+
+      <div class="control">
+        <label class="label">Buscar</label>
+        <input id="q" class="input" placeholder="Cliente, cidade, equipamento, técnico..." />
+        <div class="hint" id="statusLine">Nenhum CSV carregado ainda.</div>
+      </div>
+    </div>
+  </header>
+
+  <main class="board-wrap">
+    <div id="board" class="board" aria-label="Quadro semanal"></div>
+  </main>
+
+  <template id="tpl-column">
+    <section class="col">
+      <div class="col-header">
+        <div class="col-title"></div>
+        <div class="col-count"></div>
+      </div>
+      <div class="col-body"></div>
+    </section>
+  </template>
+
+  <template id="tpl-card">
+    <article class="card">
+      <div class="card-top">
+        <div class="labels"></div>
+        <div class="status-dot" title=""></div>
+      </div>
+
+      <div class="card-title"></div>
+      <div class="card-desc"></div>
+
+      <div class="card-bottom">
+        <div class="chip chip-date" hidden></div>
+        <div class="avatars"></div>
+      </div>
+    </article>
+  </template>
+
+  <script src="script.js"></script>
+</body>
+</html>
