@@ -1,68 +1,50 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Logística da Semana</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Logística Semanal</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header class="app-header">
+
+  <div class="app-header">
     <div class="header-left">
-      <h1>Logística da Semana</h1>
-      <div class="sub">Carregue um CSV exportado do Excel para montar o quadro por dia.</div>
+      <h1>Logística Semanal</h1>
+      <span class="sub" id="statusLine">Carregando...</span>
     </div>
-
     <div class="header-right">
-      <div class="control">
-        <label class="label">Carregar CSV (do seu computador)</label>
-        <input id="csvFile" type="file" accept=".csv,text/csv" />
-        <div class="hint">Dica: Excel costuma exportar CSV com “;” (também funciona).</div>
-      </div>
-
-      <div class="control">
-        <label class="label">Ou carregar do repositório</label>
-        <button id="btnLoadDefault" class="btn">Carregar <code>dados.csv</code></button>
-        <div class="hint">Coloque um arquivo chamado <code>dados.csv</code> na raiz do site.</div>
-      </div>
-
-      <div class="control">
-        <label class="label">Buscar</label>
-        <input id="q" class="input" placeholder="Cliente, cidade, equipamento, técnico..." />
-        <div class="hint" id="statusLine">Nenhum CSV carregado ainda.</div>
-      </div>
+      <input class="input" id="q" type="text" placeholder="🔍 Buscar cliente, cidade, equipamento..." />
     </div>
-  </header>
+  </div>
 
-  <main class="board-wrap">
-    <div id="board" class="board" aria-label="Quadro semanal"></div>
-  </main>
+  <div class="board-wrap">
+    <div class="board" id="board"></div>
+  </div>
 
   <template id="tpl-column">
-    <section class="col">
+    <div class="col">
       <div class="col-header">
-        <div class="col-title"></div>
-        <div class="col-count"></div>
+        <span class="col-title"></span>
+        <span class="col-count">0</span>
       </div>
       <div class="col-body"></div>
-    </section>
+    </div>
   </template>
 
   <template id="tpl-card">
-    <article class="card">
+    <div class="card">
       <div class="card-top">
         <div class="labels"></div>
-        <div class="status-dot" title=""></div>
+        <div class="status-dot"></div>
       </div>
-
       <div class="card-title"></div>
       <div class="card-desc"></div>
-
       <div class="card-bottom">
-        <div class="chip chip-date" hidden></div>
+        <span class="chip chip-date" hidden></span>
         <div class="avatars"></div>
       </div>
-    </article>
+    </div>
   </template>
 
   <script src="script.js"></script>
